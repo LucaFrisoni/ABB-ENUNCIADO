@@ -25,12 +25,6 @@ bool abb_insertar_rec(abb_t *abb, nodo_t **nodo_actual, void *dato,
 
 		nuevo_nodo->dato = dato;
 
-		//Caso sea el primer nodo
-		if (abb_raiz(abb) == NULL) {
-			abb->raiz = nuevo_nodo;
-			return true;
-		}
-
 		*nodo_actual = nuevo_nodo;
 		return true;
 	}

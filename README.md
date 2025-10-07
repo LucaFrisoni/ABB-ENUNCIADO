@@ -104,13 +104,12 @@ El sistema permite al usuario hacer una busqueda entre 2 operaciones predefinida
   - `id`: busca por ID con `tp1_buscar_id()`.
 - 🔹Si lo encuentra, se muestra con `mostrar_pokemon()`.
 - 🔹Si no existe, devuelve **NULL** e imprime que no fue encontrado
-  Explicación de cómo funcionan las estructuras desarrolladas en el TP y el funcionamiento general del mismo.
 
 ### 3. Liberación de Memoria
 
 Al finalizar la ejecución:
 
-- 🗑️Se destruye la lista de Pokémones con `lista_destruir(lista_pokemones)`.
+- 🗑️Se destruye el abb de Pokémones con `abb_destruir(abb)`.
 
 - 🗑️Se libera la estructura principal del TP con `tp1_destruir(tp1)`.
 

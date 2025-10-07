@@ -48,28 +48,17 @@ bool guardar_en_abb(struct pokemon *poke, void *extra)
 	return abb_insertar(abb, poke);
 }
 // ----------------------- Comparadores -----------------------
-int buscando_por_nombre_abb(const void *a, const void *b)
+int comparador_id_pk(const void *a, const void *b)
 {
-	const struct pokemon *p = a;
-	const char *nombre = b;
+	const struct pokemon *p1 = (const struct pokemon *)a;
+	const struct pokemon *p2 = (const struct pokemon *)b;
 
-	if (!p || !nombre)
-		return -1;
-
-	return strcmp(p->nombre, nombre) == 0 ? 0 : -1;
+	if (p1->id == p2->id)
+		return 0;
+	return (p1->id > p2->id) ? 1 : -1;
 }
 
-// int buscando_por_id_abb(const void *a, const void *b)
-// {
-// 	const struct pokemon *p = a;
-// 	const int *id = b;
-
-// 	if (!p || !id)
-// 		return -1;
-
-// 	return (p->id == *id) ? 0 : -1;
-// }
-// // ----------------------- Mostrar -----------------------
+// ----------------------- Mostrar -----------------------
 const char *convert_tipo_a_string(enum tipo_pokemon tipo)
 {
 	switch (tipo) {
@@ -113,23 +102,20 @@ int main(int argc, char *argv[])
 
 	struct pokemon *p = NULL;
 	tp1_t *tp1 = tp1_leer_archivo(argv[1]);
-	abb_t *abb = abb_crear();
+	abb_t *abb = abb_crear(comparador_id_pk);
 	if (!tp1 || !abb)
 		return 0;
 
 	tp1_con_cada_pokemon(tp1, guardar_en_abb, abb);
 
 	// Buscar por nombre
-	// if (strcmp(argv[3], "nombre") == 0)
-	// 	p = buscar_pokemon_iterador(lista_pokemones, argv[4],
-	// 				    buscando_por_nombre_lista);
+	if (strcmp(argv[3], "nombre") == 0) {
+	}
 
-	// // Buscar por id
-	// if (strcmp(argv[3], "id") == 0) {
-	// 	int id = atoi(argv[4]);
-	// 	p = buscar_pokemon_iterador(lista_pokemones, &id,
-	// 				    buscando_por_id_lista);
-	// }
+	// Buscar por id
+	if (strcmp(argv[3], "id") == 0) {
+		int id = atoi(argv[4]);
+	}
 
 	if (p)
 		mostrar_pokemon(p);
