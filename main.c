@@ -57,7 +57,22 @@ int comparador_id_pk(const void *a, const void *b)
 		return 0;
 	return (p1->id > p2->id) ? 1 : -1;
 }
+// ----------------------- Funciones Iterador Interno -----------------------
+bool buscando_por_nombre(void *a, void *extra)
+{
+	struct pokemon *pk_en_abb = (struct pokemon *)a;
 
+	void **param = (void **)extra;
+
+	char *nombre_buscado = (char *)param[0];
+	struct pokemon **pk = (struct pokemon **)param[1];
+
+	if (strcmp(pk_en_abb->nombre, nombre_buscado) == 0) {
+		*pk = pk_en_abb; // => pk ya no apunta a NULL, sino al pk_en_abb
+		return false; // Salimos de la iteracion
+	}
+	return true;
+}
 // ----------------------- Mostrar -----------------------
 const char *convert_tipo_a_string(enum tipo_pokemon tipo)
 {
@@ -110,11 +125,22 @@ int main(int argc, char *argv[])
 
 	// Buscar por nombre
 	if (strcmp(argv[3], "nombre") == 0) {
+		char *nombre_buscado = argv[4];
+		void *extra[2] = { nombre_buscado, &p };
+		abb_con_cada_elemento(
+			abb, 0, buscando_por_nombre,
+			extra); //O(n) si o si en el peor de los casos
 	}
 
 	// Buscar por id
 	if (strcmp(argv[3], "id") == 0) {
-		int id = atoi(argv[4]);
+		//Inicializo un pokemon con todo NULL o 0
+		struct pokemon poke_aux = { 0 };
+		poke_aux.id = atoi(argv[4]);
+
+		p = abb_buscar(
+			abb,
+			&poke_aux); // O(logn) porque estan ordenados por id
 	}
 
 	if (p)
@@ -123,6 +149,6 @@ int main(int argc, char *argv[])
 		printf("No se encontró el pokemon\n");
 
 	abb_destruir(abb);
-	tp1_destruir(tp1);
+	tp1_destruir(tp1); //Este ya libera los pokemones
 	return 0;
 }

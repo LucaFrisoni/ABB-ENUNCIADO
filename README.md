@@ -174,4 +174,26 @@ make valgrind_t
 
 ### 3. Explique la complejidad de las operaciones del .h implementadas para el TDA.
 
-justificar y agregar como seria caso promedio y peor de los casos.
+- **`abb_crear`** → O(1)
+
+- **`abb_insertar`** → O(1)
+
+- **`abb_existe`** → O(1)
+
+- **`abb_buscar`** → O(1)
+
+- **`abb_eliminar`** → O(n), donde _n_ depende de la posición
+
+- **`abb_raiz`** → O(n), donde _n_ depende de la posición
+
+- **`abb_cantidad`** → O(n), donde _n_ depende de la posición
+
+- **`abb_esta_vacio`** → O(n), donde _n_ depende de la posición
+
+- **`abb_con_cada_elemento`** → O(n), donde _n_ es la cantidad de elementos.
+
+- **`abb_vectorizar`** → O(n) , donde _n_ es la cantidad de elementos.
+
+- **`abb_destruir`** → O(n), donde _n_ es la cantidad de elementos.
+
+- **`abb_destruir_todo`** → O(1)
