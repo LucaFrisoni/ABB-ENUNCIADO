@@ -37,15 +37,27 @@ A continuación se detallan las estructuras principales:
 
 #### 🔹`nodo_t`
 
-Representa un **nodo** de la lista enlazada.
+Representa un **nodo** del arbol binario.
 
-- Contiene un puntero genérico al dato almacenado.
-- Guarda un puntero al siguiente nodo en la lista.
+- Contiene un **puntero genérico** al dato almacenado _(Puede ser NULL)_.
+- Guarda un **puntero** al siguiente nodo derecho _(Puede ser NULL)_.
+- Guarda un **puntero** al siguiente nodo izquierdo _(Puede ser NULL)_.
 
 📊 **Diagrama de memoria:**  
 ![image1](assets/img/image.png)
 
 ---
+
+#### 🔹`abb_t`
+
+Representa un **arbol binario**.
+
+- Contiene la **cantidad total** de elementos del arbol.
+- Guarda un puntero al **nodo raiz**.
+- Guarda una **funcion comparadora**.
+
+📊 **Diagrama de memoria:**  
+![image1](assets/img/image.png)
 
 ---
 
@@ -91,7 +103,36 @@ tp1_t *tp1_leer_archivo(const char *nombre);
 
 ---
 
-### 2.2 Selección de operación (según `argv[2]`)
+### 2.2 Inserscion en abb
+
+Se recorre la estructura `tp1_t` que contiene los pokemones previamente cargados desde un archivo .csv con `tp1_leer_archivo()`, y se aplica una función callback a cada Pokémon, en este caso , para insertarlo en el **arbol binario de busqueda**.
+
+```c
+size_t tp1_con_cada_pokemon(tp1_t *un_tp, bool (*f)(struct pokemon *, void *),
+			    void *extra);
+```
+
+**📌Esta función se encarga de:**
+
+- 🔹Recorrer todos los pokemones almacenados en la estructura tp1_t.
+- 🔹Por cada pokémon, llamar a la función f que recibe como parámetros:
+
+1. Un puntero al struct pokemon actual.
+2. El puntero extra, que en este caso es el abb creado con `abb_insertar()` donde se van a insertar los pokemones.
+
+- 🔹Inserta cada pokemon con `abb_insertar()` hasta que no haya mas pokemones.
+- 🔹Retorna la cantidad de pokemones para los cuales f devolvió true.
+
+_Ejemplo de uso:_
+
+```c
+abb_t *abb = abb_crear(comparador_id_pk);
+tp1_con_cada_pokemon(tp1, guardar_en_abb, abb);
+```
+
+---
+
+### 2.3 Selección de operación (según `argv[2]`)
 
 El sistema permite al usuario hacer una busqueda entre 2 operaciones predefinidas.
 
@@ -100,8 +141,8 @@ El sistema permite al usuario hacer una busqueda entre 2 operaciones predefinida
 **Parámetros:** `<tipo_busqueda> <valor>`
 
 - 🔹Permite buscar un Pokémon en el archivo:
-  - `nombre`: busca por nombre con `tp1_buscar_nombre()`.
-  - `id`: busca por ID con `tp1_buscar_id()`.
+  - `nombre`: busca con el iterador interno `abb_con_cada_elemento()`.
+  - `id`: busca con `abb_buscar()` ya que el arbol esta ordenado por ID.
 - 🔹Si lo encuentra, se muestra con `mostrar_pokemon()`.
 - 🔹Si no existe, devuelve **NULL** e imprime que no fue encontrado
 
@@ -111,7 +152,7 @@ Al finalizar la ejecución:
 
 - 🗑️Se destruye el abb de Pokémones con `abb_destruir(abb)`.
 
-- 🗑️Se libera la estructura principal del TP con `tp1_destruir(tp1)`.
+- 🗑️Se libera la estructura principal del TP y los pokemones con `tp1_destruir(tp1)`.
 
 Esto asegura que no queden memory leaks ni recursos sin liberar.
 
