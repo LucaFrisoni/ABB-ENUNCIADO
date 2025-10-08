@@ -293,11 +293,11 @@ Un árbol binario es un árbol donde cada nodo puede tener como máximo dos hijo
 
 ##### Ejemplos de uso:
 
-Representación de expresiones matemáticas (árboles de expresión).
+- Representación de expresiones matemáticas (árboles de expresión).
 
-Árboles de decisión donde cada decisión es binaria (sí/no).
+- Árboles de decisión donde cada decisión es binaria (sí/no).
 
-Juegos tipo “adivina el número” o “árbol de preguntas”.
+- Juegos tipo “adivina el número” o “árbol de preguntas”.
 
 #### Árbol Binario de Búsqueda
 
@@ -331,6 +331,43 @@ Para cada nodo:
 
 ### 2. Explique la implementación de ABB realizada y las decisiones de diseño tomadas (por ejemplo, si tal o cuál funciones fue planteada de forma recursiva, iterativa o mixta y por qué, que dificultades encontró al manejar los nodos y punteros, reservar y liberar memoria, etc).
 
+1. **Recursividad vs Iteración**
+
+Las operaciones principales (insertar, buscar, eliminar) fueron implementadas recursivamente.
+
+- Los recorridos (inorden, preorden, postorden) se implementaron de manera recursiva para visitar nodos en el orden deseado y permitir aplicar una función sobre cada dato.
+- Justificación: facilita la lógica de manejo de subárboles y reduce la complejidad del código, ya que cada llamada recursiva maneja un subárbol completo.
+
+2. **Manejo de nodos y punteros**
+
+- Cada nodo se reserva dinámicamente con calloc al insertar un nuevo elemento.
+
+- Los punteros a los hijos se actualizan cuidadosamente para mantener la estructura del árbol.
+
+- Al eliminar nodos, se libera la memoria usando free, y se actualizan los punteros de los padres para evitar pérdidas de memoria o punteros colgantes.
+
+3. **Funciones auxiliares**
+
+Se crearon funciones como `reemplazar_por_predecesor` y `reemplazar_por_hijo` para manejar los casos de eliminación de nodos con dos hijos o un solo hijo, simplificando la lógica de `abb_eliminar`.
+
+4. **Seguridad y robustez**
+
+- Se verifican punteros nulos antes de acceder a nodos o a la raíz, evitando errores de segmentación.
+
+- En funciones que reciben un puntero a ABB, se chequea que el árbol exista antes de realizar cualquier operación.
+
+- Las funciones de destrucción permiten pasar un destructor de datos opcional para liberar memoria asociada a los datos almacenados en los nodos.
+
+5. **Dificultades encontradas**
+
+- Manejar correctamente los punteros a los hijos y la raíz, especialmente al eliminar nodos con dos hijos, para no perder referencias.
+
+- La sintasix de los doble punteros
+
+- Evitar errores de segmentación al recibir punteros nulos o datos inexistentes en las operaciones de búsqueda o eliminación.
+
+- Reservar y liberar memoria sin generar fugas, asegurando que todos los nodos se liberen al destruir el árbol.
+
 ### 3. Explique la complejidad de las operaciones del .h implementadas para el TDA.
 
 - **`abb_crear`** → O(1)
@@ -345,7 +382,7 @@ Para cada nodo:
   Por lo tanto, si el árbol está degenerado, en el peor de los casos se comporta como una **lista** y es O(n). Si el árbol se encuentra **balanceado**, la complejidad es O(log(n)), ya que en cada paso se descarta la mitad de los nodos restantes (divide y vencerás).
 
 - **`abb_buscar`** → O(log (n)) / O(n)
-  La función hace operaciones de costo constante al inicio (chequeo de punteros) y al final (retorno del dato o NULL). La complejidad depende de la llamada a **abb_buscar_nodo**, que en cada paso realiza comparaciones y chequeos de punteros de costo constante.
+  La función hace operaciones de costo constante al inicio (chequeo de punteros) y al final (retorno del dato o NULL). La complejidad depende de la llamada a `abb_buscar_nodo`, que en cada paso realiza comparaciones y chequeos de punteros de costo constante.
   Por lo tanto, si el árbol está degenerado, en el peor de los casos se comporta como una **lista** y es O(n). Si el árbol se encuentra **balanceado**, la complejidad es O(log(n)), ya que en cada paso se descarta la mitad de los nodos restantes (divide y vencerás).
 
 - **`abb_eliminar`** → O(log (n)) / O(n)
@@ -367,14 +404,14 @@ Para cada nodo:
 - **`abb_con_cada_elemento`** → O(n)
   Las funcion hace llamados recursivos para recorrer los nodos del árbol, y en cada paso realizan operaciones de costo constante (comparaciones y llamadas a la función f). La complejidad depende de la cantidad de nodos que se visitan.
   Por lo tanto, en el peor caso, se recorren todos los nodos del árbol, lo que da una complejidad O(n), donde n es la cantidad de nodos del árbol.
-  En consecuencia, la función **abb_con_cada_elemento** y los recorridos específicos **abb_in_orden**, **abb_pre_orden** y **abb_post_orden** tienen complejidad O(n) en el peor caso, visitando cada nodo exactamente una vez.
+  En consecuencia, la función `abb_con_cada_elemento` y los recorridos específicos **abb_in_orden**, **abb_pre_orden** y **abb_post_orden** tienen complejidad O(n) en el peor caso, visitando cada nodo exactamente una vez.
 
 - **`abb_vectorizar`** → O(min(n, cant))
-  La función realiza operaciones de costo constante al inicio (chequeos de punteros, inicialización de variables). Luego llama a **abb_con_cada_elemento**, que recorre los nodos del árbol y ejecuta operaciones de costo constante en cada nodo .
+  La función realiza operaciones de costo constante al inicio (chequeos de punteros, inicialización de variables). Luego llama a `abb_con_cada_elemento`, que recorre los nodos del árbol y ejecuta operaciones de costo constante en cada nodo .
   La cantidad de nodos efectivamente procesados depende de la menor de dos cantidades: la cantidad de nodos del árbol **n** o el valor **cant** pasado como parámetro. Por lo tanto, la función recorre como máximo min(n, cant) nodos.
-  En consecuencia, la complejidad de **abb_vectorizar** es O(min(n, cant)), ya que solo se procesan hasta cant nodos o todos los nodos existentes en el árbol.
+  En consecuencia, la complejidad de `abb_vectorizar` es O(min(n, cant)), ya que solo se procesan hasta cant nodos o todos los nodos existentes en el árbol.
 
 - **`abb_destruir` y `abb_destruir_todo`** → O(n)
-  La función hace llamados recursivos a **abb_destruir_nodo** para recorrer todos los nodos del árbol, y en cada paso realiza operaciones de costo constante: llamadas al destructor del dato (si existe) y liberación de memoria del nodo.
+  La función hace llamados recursivos a `abb_destruir_nodo` para recorrer todos los nodos del árbol, y en cada paso realiza operaciones de costo constante: llamadas al destructor del dato (si existe) y liberación de memoria del nodo.
   Por lo tanto, en el peor caso, se recorren todos los nodos del árbol, lo que da una complejidad O(n), donde n es la cantidad de nodos del árbol.
-  En consecuencia, las funciones **abb_destruir**, **abb_destruir_todo** tienen complejidad O(n), ya que visitan y liberan cada nodo exactamente una vez.
+  En consecuencia, las funciones `abb_destruir`, `abb_destruir_todo` tienen complejidad O(n), ya que visitan y liberan cada nodo exactamente una vez.
