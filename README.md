@@ -43,8 +43,7 @@ Representa un **nodo** del arbol binario.
 - Guarda un **puntero** al siguiente nodo derecho _(Puede ser NULL)_.
 - Guarda un **puntero** al siguiente nodo izquierdo _(Puede ser NULL)_.
 
-📊 **Diagrama de memoria:**  
-![image1](assets/img/image.png)
+📊 **Diagrama de memoria:**
 
 ---
 
@@ -56,8 +55,7 @@ Representa un **arbol binario**.
 - Guarda un puntero al **nodo raiz**.
 - Guarda una **funcion comparadora**.
 
-📊 **Diagrama de memoria:**  
-![image1](assets/img/image.png)
+📊 **Diagrama de memoria:**
 
 ---
 
@@ -221,7 +219,9 @@ Un árbol es una estructura de datos jerárquica formada por nodos conectados me
 
 - Los nodos que no tienen hijos se llaman hojas.
 
-- Cada nodo puede tener un padre, excepto la raíz, que no tiene.
+- Cada nodo tiene un padre, excepto la raíz, que no tiene.
+
+- Cada nodo es un subarbol hacia abajo
 
 ##### Cómo funciona:
 
@@ -241,23 +241,23 @@ Un árbol es una estructura de datos jerárquica formada por nodos conectados me
 
 - **N-arios:** Cada nodo puede tener hasta n hijos.
 
-- ###### Ejemplo: árbol de directorios en un sistema operativo.
+###### Ejemplo: árbol de directorios en un sistema operativo.
 
 - **AVL:** ABB auto-balanceado, donde la diferencia de altura entre subárboles izquierdo y derecho de cada nodo es como máximo 1.
 
-- ###### Ejemplo: búsqueda eficiente garantizada.
+###### Ejemplo: búsqueda eficiente garantizada.
 
-- **Árbol Rojo-Negro:** ABB balanceado con reglas de color para mantener altura logarítmica.
+**Árbol Rojo-Negro:** ABB balanceado con reglas de color para mantener altura logarítmica.
 
-- ###### Ejemplo: implementaciones de std::map en C++ o TreeMap en Java.
+###### Ejemplo: implementaciones de std::map en C++ o TreeMap en Java.
 
-- **Árboles B, B- y B+:** Árboles balanceados con múltiples hijos por nodo, usados en bases de datos y sistemas de archivos.
+**Árboles B, B- y B+:** Árboles balanceados con múltiples hijos por nodo, usados en bases de datos y sistemas de archivos.
 
-- ###### Ejemplo: índices en bases de datos.
+###### Ejemplo: índices en bases de datos.
 
-- **Heap Binario:** Árbol binario completo donde cada nodo cumple propiedad de heap (padre ≥ hijos para max-heap, padre ≤ hijos para min-heap).
+**Heap Binario:** Árbol binario completo donde cada nodo cumple propiedad de heap (padre ≥ hijos para max-heap, padre ≤ hijos para min-heap).
 
-- ###### Ejemplo: colas de prioridad.
+###### Ejemplo: colas de prioridad.
 
 ##### Operaciones basicas
 
@@ -281,6 +281,9 @@ Un árbol es una estructura de datos jerárquica formada por nodos conectados me
 
 - **Postorden:** Izquierda → Derecha → Nodo.
 
+📊 **Diagrama**  
+![image4](assets/img/image4.png)
+
 #### Árbol Binario
 
 Un árbol binario es un árbol donde cada nodo puede tener como máximo dos hijos: un hijo izquierdo y un hijo derecho.
@@ -298,6 +301,9 @@ Un árbol binario es un árbol donde cada nodo puede tener como máximo dos hijo
 - Árboles de decisión donde cada decisión es binaria (sí/no).
 
 - Juegos tipo “adivina el número” o “árbol de preguntas”.
+
+  📊 **Diagrama**  
+  ![image5](assets/img/image5.png)
 
 #### Árbol Binario de Búsqueda
 
@@ -328,6 +334,9 @@ Para cada nodo:
 - Diccionarios y tablas de símbolos.
 
 - Implementación de conjuntos ordenados o mapas ordenados.
+
+  📊 **Diagrama**  
+  ![image6](assets/img/image6.png)
 
 ### 2. Explique la implementación de ABB realizada y las decisiones de diseño tomadas (por ejemplo, si tal o cuál funciones fue planteada de forma recursiva, iterativa o mixta y por qué, que dificultades encontró al manejar los nodos y punteros, reservar y liberar memoria, etc).
 
