@@ -315,7 +315,8 @@ void test_abb_insertar_despues_de_eliminar()
 	insertando_dinamic_en_abb(abb, 3);
 
 	int valor = 1;
-	abb_eliminar(abb, &valor);
+	int *eliminado = abb_eliminar(abb, &valor);
+	free(eliminado);
 
 	insertando_dinamic_en_abb(abb, 2);
 
@@ -393,14 +394,14 @@ void test_abb_insertar_despues_de_vectorizar()
 
 	abb_destruir_todo(abb, free);
 }
-void test_abb_insertar_despues_de_destruir()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	abb_destruir(abb);
+// void test_abb_insertar_despues_de_destruir()
+// {
+// 	abb_t *abb = abb_crear(comparador_num);
+// 	abb_destruir(abb);
 
-	pa2m_afirmar(insertando_dinamic_en_abb(abb, 2) == false,
-		     "No se puede insertar luego de destruir el arbol");
-}
+// 	pa2m_afirmar(insertando_dinamic_en_abb(abb, 2) == false,
+// 		     "No se puede insertar luego de destruir el arbol");
+// }
 void test_abb_insertar_prueba_estres()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -431,7 +432,7 @@ void tests_abb_insertar()
 	test_abb_insertar_despues_de_existencia();
 	test_abb_insertar_despues_de_iterador_interno();
 	test_abb_insertar_despues_de_vectorizar();
-	test_abb_insertar_despues_de_destruir();
+	// test_abb_insertar_despues_de_destruir();
 	test_abb_insertar_prueba_estres();
 }
 // ------------------------------------------------------------------
@@ -1365,7 +1366,7 @@ void test_abb_eliminar_prueba_estres()
 		int *eliminado = abb_eliminar(abb, numeros[i]);
 		if (!eliminado || *eliminado != (int)i)
 			exito = false;
-		free(numeros[i]);
+		free(eliminado);
 	}
 
 	pa2m_afirmar(exito && abb_cantidad(abb) == 0,
@@ -1579,16 +1580,6 @@ void test_abb_raiz_despues_de_vectorizar()
 
 	abb_destruir_todo(abb, free);
 }
-void test_abb_raiz_despues_de_destruir()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	insertando_dinamic_en_abb(abb, 5);
-
-	abb_destruir_todo(abb, free);
-
-	pa2m_afirmar(abb_raiz(abb) == NULL,
-		     "La raiz es NULL después de destruir el abb");
-}
 void test_abb_raiz_prueba_estres()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -1617,7 +1608,6 @@ void tests_abb_raiz()
 	test_abb_raiz_despues_de_eliminar();
 	test_abb_raiz_despues_de_iterar_internamente();
 	test_abb_raiz_despues_de_vectorizar();
-	test_abb_raiz_despues_de_destruir();
 	test_abb_raiz_prueba_estres();
 }
 // ------------------------------------------------------------------

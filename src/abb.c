@@ -306,7 +306,7 @@ void abb_destruir_nodo(nodo_t *nodo, void (*destructor)(void *))
 
 void abb_destruir_todo(abb_t *abb, void (*destructor)(void *))
 {
-	if (!abb || !abb->raiz)
+	if (!abb)
 		return;
 
 	abb_destruir_nodo(abb->raiz, destructor);
