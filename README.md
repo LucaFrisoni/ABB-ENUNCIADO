@@ -241,23 +241,23 @@ Un árbol es una estructura de datos jerárquica formada por nodos conectados me
 
 - **N-arios:** Cada nodo puede tener hasta n hijos.
 
-Ejemplo: árbol de directorios en un sistema operativo.
+###### Ejemplo: árbol de directorios en un sistema operativo.
 
 - **AVL:** ABB auto-balanceado, donde la diferencia de altura entre subárboles izquierdo y derecho de cada nodo es como máximo 1.
 
-Ejemplo: búsqueda eficiente garantizada.
+###### Ejemplo: búsqueda eficiente garantizada.
 
 - **Árbol Rojo-Negro:** ABB balanceado con reglas de color para mantener altura logarítmica.
 
-Ejemplo: implementaciones de std::map en C++ o TreeMap en Java.
+###### Ejemplo: implementaciones de std::map en C++ o TreeMap en Java.
 
 - **Árboles B, B- y B+:** Árboles balanceados con múltiples hijos por nodo, usados en bases de datos y sistemas de archivos.
 
-Ejemplo: índices en bases de datos.
+###### Ejemplo: índices en bases de datos.
 
 - **Heap Binario:** Árbol binario completo donde cada nodo cumple propiedad de heap (padre ≥ hijos para max-heap, padre ≤ hijos para min-heap).
 
-Ejemplo: colas de prioridad.
+###### Ejemplo: colas de prioridad.
 
 ##### Operaciones basicas
 
