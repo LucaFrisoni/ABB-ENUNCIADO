@@ -118,7 +118,7 @@ size_t tp1_con_cada_pokemon(tp1_t *un_tp, bool (*f)(struct pokemon *, void *),
 - 🔹Por cada pokémon, llamar a la función f que recibe como parámetros:
 
 1. Un puntero al struct pokemon actual.
-2. El puntero extra, que en este caso es el abb creado con `abb_insertar()` donde se van a insertar los pokemones.
+2. El puntero extra, que en este caso es el abb creado con `abb_crear()` donde se van a insertar los pokemones.
 
 - 🔹Inserta cada pokemon con `abb_insertar()` hasta que no haya mas pokemones.
 - 🔹Retorna la cantidad de pokemones para los cuales f devolvió true.
@@ -211,30 +211,170 @@ make valgrind_t
 
 ### 1. Explique teóricamente (y utilizando gráficos) qué es una árbol, árbol binario y árbol binario de búsqueda. Explique cómo funcionan y de ejemplos de utilización de cada uno.
 
+#### Árbol
+
+Un árbol es una estructura de datos jerárquica formada por nodos conectados mediante aristas.
+
+- Cada nodo puede tener cero o más hijos.
+
+- Existe un nodo raíz, que es el nodo superior del árbol.
+
+- Los nodos que no tienen hijos se llaman hojas.
+
+- Cada nodo puede tener un padre, excepto la raíz, que no tiene.
+
+##### Cómo funciona:
+
+- Permite organizar información de manera jerárquica.
+
+- Se puede recorrer de varias formas: profundidad primero (preorden, postorden, inorden) o amplitud primero (nivel por nivel).
+
+##### Ejemplos de uso:
+
+- Estructura de directorios en un sistema operativo.
+
+- Árbol de decisión en inteligencia artificial.
+
+- Representación de jerarquías familiares.
+
+##### Tipos de Árbol(Ademas de los que pide la consigna)
+
+- **N-arios:** Cada nodo puede tener hasta n hijos.
+
+Ejemplo: árbol de directorios en un sistema operativo.
+
+- **AVL:** ABB auto-balanceado, donde la diferencia de altura entre subárboles izquierdo y derecho de cada nodo es como máximo 1.
+
+Ejemplo: búsqueda eficiente garantizada.
+
+- **Árbol Rojo-Negro:** ABB balanceado con reglas de color para mantener altura logarítmica.
+
+Ejemplo: implementaciones de std::map en C++ o TreeMap en Java.
+
+- **Árboles B, B- y B+:** Árboles balanceados con múltiples hijos por nodo, usados en bases de datos y sistemas de archivos.
+
+Ejemplo: índices en bases de datos.
+
+- **Heap Binario:** Árbol binario completo donde cada nodo cumple propiedad de heap (padre ≥ hijos para max-heap, padre ≤ hijos para min-heap).
+
+Ejemplo: colas de prioridad.
+
+##### Operaciones basicas
+
+1. **Crear:** Inicializa la estructura del árbol.
+
+2. **Destruir:** Libera todos los nodos y la memoria asociada.
+
+3. **Insertar:** Agrega un nodo respetando las propiedades del árbol.
+
+4. **Borrar:** Elimina un nodo y ajusta el árbol según su tipo.
+
+5. **Buscar:** Encuentra un nodo o valor en el árbol.
+
+6. **Vacío:** Verifica si el árbol tiene nodos o está vacío.
+
+7. **Recorrer**: Visita todos los nodos siguiendo un orden específico:
+
+- **Inorden:** Izquierda → Nodo → Derecha.
+
+- **Preorden:** Nodo → Izquierda → Derecha.
+
+- **Postorden:** Izquierda → Derecha → Nodo.
+
+#### Árbol Binario
+
+Un árbol binario es un árbol donde cada nodo puede tener como máximo dos hijos: un hijo izquierdo y un hijo derecho.
+
+##### Cómo funciona:
+
+- Cada nodo apunta a hasta dos subárboles (izquierdo y derecho).
+
+- Se pueden realizar recorridos similares a los del árbol general: inorden, preorden, postorden.
+
+##### Ejemplos de uso:
+
+Representación de expresiones matemáticas (árboles de expresión).
+
+Árboles de decisión donde cada decisión es binaria (sí/no).
+
+Juegos tipo “adivina el número” o “árbol de preguntas”.
+
+#### Árbol Binario de Búsqueda
+
+Un árbol binario de búsqueda es un árbol binario con una propiedad especial de orden:
+
+Para cada nodo:
+
+- Los valores en el subárbol izquierdo son menores que el valor del nodo.
+
+- Los valores en el subárbol derecho son mayores que el valor del nodo.
+
+##### Cómo funciona:
+
+- Esto permite buscar, insertar o eliminar elementos de forma eficiente.
+
+- La búsqueda se hace comparando el valor buscado con el nodo actual y descendiendo a izquierda o derecha según corresponda.
+
+- La complejidad depende de la altura del árbol:
+
+1. Árbol balanceado → O(log n)
+
+2. Árbol desbalanceado → O(n)
+
+##### Ejemplos de uso:
+
+- Bases de datos donde se requiere búsqueda rápida.
+
+- Diccionarios y tablas de símbolos.
+
+- Implementación de conjuntos ordenados o mapas ordenados.
+
 ### 2. Explique la implementación de ABB realizada y las decisiones de diseño tomadas (por ejemplo, si tal o cuál funciones fue planteada de forma recursiva, iterativa o mixta y por qué, que dificultades encontró al manejar los nodos y punteros, reservar y liberar memoria, etc).
 
 ### 3. Explique la complejidad de las operaciones del .h implementadas para el TDA.
 
 - **`abb_crear`** → O(1)
+  La funcion ejecuta una cantidad constantes de pasos, independiemente del tamaño del árbol o de los datos
+  Por lo tanto, la complejidad es O(1) en todos los casos.
 
-- **`abb_insertar`** → O(1)
+- **`abb_insertar`** → O(log (n)) / O(n)
+  La funcion hace llamados recursivos, que en cada paso hace operaciones de costo constante(comparaciones,asignaciones,reserva de memoria). La complejidad depende de la cantidad de pasos necesarios hasta encontrar la posicion correcta en el árbol. Por lo tanto si el arbol esta degenerado, en el peor de los casos,se comporta como una **lista** y es O(n). Si el arbol se encuentra **balanceado** es O(log(n)) en donde en cada paso se descarta aproximadamente la mitad de los nodos restantes(divide y venceras)
 
-- **`abb_existe`** → O(1)
+- **`abb_existe`** → O(log (n)) / O(n)
+  La función hace llamados recursivos, que en cada paso realiza operaciones de costo constante (comparaciones, chequeos de punteros). La complejidad depende de la cantidad de pasos necesarios hasta encontrar el dato o llegar a un nodo nulo, lo cual está determinado por la altura del árbol.
+  Por lo tanto, si el árbol está degenerado, en el peor de los casos se comporta como una **lista** y es O(n). Si el árbol se encuentra **balanceado**, la complejidad es O(log(n)), ya que en cada paso se descarta la mitad de los nodos restantes (divide y vencerás).
 
-- **`abb_buscar`** → O(1)
+- **`abb_buscar`** → O(log (n)) / O(n)
+  La función hace operaciones de costo constante al inicio (chequeo de punteros) y al final (retorno del dato o NULL). La complejidad depende de la llamada a **abb_buscar_nodo**, que en cada paso realiza comparaciones y chequeos de punteros de costo constante.
+  Por lo tanto, si el árbol está degenerado, en el peor de los casos se comporta como una **lista** y es O(n). Si el árbol se encuentra **balanceado**, la complejidad es O(log(n)), ya que en cada paso se descarta la mitad de los nodos restantes (divide y vencerás).
 
-- **`abb_eliminar`** → O(n), donde _n_ depende de la posición
+- **`abb_eliminar`** → O(log (n)) / O(n)
+  La función hace llamados recursivos, que en cada paso realizan operaciones de costo constante (comparaciones, chequeos de punteros, asignaciones y liberación de memoria). La complejidad depende de la cantidad de pasos necesarios hasta encontrar el nodo a eliminar, lo cual está determinado por la altura del árbol.
+  En el peor de los casos, si el árbol está degenerado y se comporta como una **lista**, la altura es h = n, por lo que la complejidad es O(n). Si el árbol está **balanceado**, la complejidad es O(log(n)), ya que en cada paso se descarta aproximadamente la mitad de los nodos restantes (divide y vencerás).
 
-- **`abb_raiz`** → O(n), donde _n_ depende de la posición
+- **`abb_raiz`** → O(1)
+  La función realiza operaciones de costo constante: chequeo de punteros y retorno del dato de la raíz. No depende del tamaño del árbol ni recorre nodos.
+  Por lo tanto, la complejidad es O(1) en todos los casos.
 
-- **`abb_cantidad`** → O(n), donde _n_ depende de la posición
+- **`abb_cantidad`** → O(1)
+  La función realiza operaciones de costo constante: chequeo de puntero y retorno de un valor almacenado en la estructura. No depende del tamaño del árbol ni recorre nodos.
+  Por lo tanto, la complejidad es O(1) en todos los casos.
 
-- **`abb_esta_vacio`** → O(n), donde _n_ depende de la posición
+- **`abb_esta_vacio`** → O(1)
+  La función realiza operaciones de costo constante: chequeo de puntero y comparación con NULL. No depende del tamaño del árbol ni recorre nodos.
+  Por lo tanto, la complejidad es O(1) en todos los casos.
 
-- **`abb_con_cada_elemento`** → O(n), donde _n_ es la cantidad de elementos.
+- **`abb_con_cada_elemento`** → O(n)
+  Las funcion hace llamados recursivos para recorrer los nodos del árbol, y en cada paso realizan operaciones de costo constante (comparaciones y llamadas a la función f). La complejidad depende de la cantidad de nodos que se visitan.
+  Por lo tanto, en el peor caso, se recorren todos los nodos del árbol, lo que da una complejidad O(n), donde n es la cantidad de nodos del árbol.
+  En consecuencia, la función **abb_con_cada_elemento** y los recorridos específicos **abb_in_orden**, **abb_pre_orden** y **abb_post_orden** tienen complejidad O(n) en el peor caso, visitando cada nodo exactamente una vez.
 
-- **`abb_vectorizar`** → O(n) , donde _n_ es la cantidad de elementos.
+- **`abb_vectorizar`** → O(min(n, cant))
+  La función realiza operaciones de costo constante al inicio (chequeos de punteros, inicialización de variables). Luego llama a **abb_con_cada_elemento**, que recorre los nodos del árbol y ejecuta operaciones de costo constante en cada nodo .
+  La cantidad de nodos efectivamente procesados depende de la menor de dos cantidades: la cantidad de nodos del árbol **n** o el valor **cant** pasado como parámetro. Por lo tanto, la función recorre como máximo min(n, cant) nodos.
+  En consecuencia, la complejidad de **abb_vectorizar** es O(min(n, cant)), ya que solo se procesan hasta cant nodos o todos los nodos existentes en el árbol.
 
-- **`abb_destruir`** → O(n), donde _n_ es la cantidad de elementos.
-
-- **`abb_destruir_todo`** → O(1)
+- **`abb_destruir` y `abb_destruir_todo`** → O(n)
+  La función hace llamados recursivos a **abb_destruir_nodo** para recorrer todos los nodos del árbol, y en cada paso realiza operaciones de costo constante: llamadas al destructor del dato (si existe) y liberación de memoria del nodo.
+  Por lo tanto, en el peor caso, se recorren todos los nodos del árbol, lo que da una complejidad O(n), donde n es la cantidad de nodos del árbol.
+  En consecuencia, las funciones **abb_destruir**, **abb_destruir_todo** tienen complejidad O(n), ya que visitan y liberan cada nodo exactamente una vez.
