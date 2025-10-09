@@ -1226,7 +1226,7 @@ void test_abb_eliminar_elimina_correctamente_struct()
 }
 void test_abb_eliminar_elimina_correctamente_null()
 {
-	abb_t *abb = abb_crear(comparador_num);
+	abb_t *abb = abb_crear(comparador_null);
 
 	abb_insertar(abb, NULL);
 	void *eliminado = abb_eliminar(abb, NULL);
@@ -1354,7 +1354,7 @@ void test_abb_eliminar_luego_de_vectorizar()
 void test_abb_eliminar_prueba_estres()
 {
 	abb_t *abb = abb_crear(comparador_num);
-	size_t cantidad = 5000;
+	int cantidad = 5000;
 	int *numeros[cantidad];
 
 	// Insertamos 5000 nodos
@@ -1362,7 +1362,7 @@ void test_abb_eliminar_prueba_estres()
 
 	// Eliminamos todos los nodos
 	bool exito = true;
-	for (size_t i = 0; i < cantidad; i++) {
+	for (int i = 0; i < cantidad; i++) {
 		int *eliminado = abb_eliminar(abb, numeros[i]);
 		if (!eliminado || *eliminado != (int)i)
 			exito = false;
@@ -1383,18 +1383,18 @@ void tests_abb_eliminar()
 	test_abb_eliminar_reduce_cantidad();
 	test_abb_eliminar_elimina_correctamente_unico_nodo();
 	test_abb_eliminar_elimina_correctamente_varios_nodos();
-	// test_abb_eliminar_elimina_correctamente_raiz_varios_nodos();
-	// test_abb_eliminar_elimina_correctamente_nodo_con_hijo_der();
-	// test_abb_eliminar_elimina_correctamente_nodo_con_hijo_izq();
-	// test_abb_eliminar_elimina_correctamente_nodo_sin_hijos();
-	// test_abb_eliminar_elimina_correctamente_nodo_con_dos_hijos();
+test_abb_eliminar_elimina_correctamente_raiz_varios_nodos();
+test_abb_eliminar_elimina_correctamente_nodo_con_hijo_der();
+test_abb_eliminar_elimina_correctamente_nodo_con_hijo_izq();
+test_abb_eliminar_elimina_correctamente_nodo_sin_hijos();
+test_abb_eliminar_elimina_correctamente_nodo_con_dos_hijos();
 	test_abb_eliminar_elimina_correctamente_entero();
 	test_abb_eliminar_elimina_correctamente_string();
 	test_abb_eliminar_elimina_correctamente_double();
 	test_abb_eliminar_elimina_correctamente_booleano();
 	test_abb_eliminar_elimina_correctamente_vector();
 	test_abb_eliminar_elimina_correctamente_struct();
-	// test_abb_eliminar_elimina_correctamente_null();
+	test_abb_eliminar_elimina_correctamente_null();
 	test_abb_eliminar_devuelve_null_si_elimina_datounico_ya_eliminado_();
 	test_abb_eliminar_elimina_correctamente_datos_repetidos();
 	test_abb_eliminar_luego_de_insertar();
@@ -1402,7 +1402,7 @@ void tests_abb_eliminar()
 	test_abb_eliminar_luego_de_existencia();
 	test_abb_eliminar_luego_de_iterador_interno();
 	test_abb_eliminar_luego_de_vectorizar();
-	// test_abb_eliminar_prueba_estres();
+	test_abb_eliminar_prueba_estres();
 }
 // ------------------------------------------------------------------
 

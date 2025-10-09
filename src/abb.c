@@ -93,10 +93,11 @@ nodo_t *reemplazar_por_predecesor(nodo_t *nodo)
 		predecesor = predecesor->der;
 	}
 
-	if (padre_aux)
+	if (padre_aux){
 		padre_aux->der = predecesor->izq;
-
-	predecesor->izq = nodo->izq;
+		predecesor->izq = nodo->izq;
+	}
+		
 	predecesor->der = nodo->der;
 
 	return predecesor;
@@ -115,6 +116,8 @@ void *eliminando_nodo(abb_t *abb, nodo_t **nodo_actual)
 	if ((*nodo_actual)->izq && (*nodo_actual)->der) {
 		//Caso dos hijos
 		nuevo_nodo = reemplazar_por_predecesor(*nodo_actual);
+
+
 	} else if ((*nodo_actual)->izq || (*nodo_actual)->der) {
 		//Caso un hijo
 		nuevo_nodo = reemplazar_por_hijo(*nodo_actual);
