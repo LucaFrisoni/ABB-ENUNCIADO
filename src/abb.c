@@ -93,11 +93,11 @@ nodo_t *reemplazar_por_predecesor(nodo_t *nodo)
 		predecesor = predecesor->der;
 	}
 
-	if (padre_aux){
+	if (padre_aux) {
 		padre_aux->der = predecesor->izq;
 		predecesor->izq = nodo->izq;
 	}
-		
+
 	predecesor->der = nodo->der;
 
 	return predecesor;
@@ -116,7 +116,6 @@ void *eliminando_nodo(abb_t *abb, nodo_t **nodo_actual)
 	if ((*nodo_actual)->izq && (*nodo_actual)->der) {
 		//Caso dos hijos
 		nuevo_nodo = reemplazar_por_predecesor(*nodo_actual);
-
 
 	} else if ((*nodo_actual)->izq || (*nodo_actual)->der) {
 		//Caso un hijo
@@ -181,57 +180,65 @@ bool abb_esta_vacio(abb_t *abb)
 	return abb->raiz == NULL;
 }
 //-----------------------------------------------------------------------------------------------
-size_t abb_in_orden(nodo_t *nodo_actual, bool (*f)(void *, void *), void *extra)
+size_t abb_in_orden(nodo_t *nodo_actual, bool (*f)(void *, void *), void *extra,
+		    bool *cortar)
 {
-	if (!nodo_actual)
+	if (!nodo_actual || *cortar)
 		return 0;
 
 	size_t cont = 0;
 
-	cont += abb_in_orden(nodo_actual->izq, f, extra);
+	cont += abb_in_orden(nodo_actual->izq, f, extra, cortar);
+	if (*cortar)
+		return cont;
 
-	if (!f(nodo_actual->dato, extra))
+	if (!f(nodo_actual->dato, extra)) {
+		*cortar = true;
 		return cont + 1;
+	}
 
 	cont += 1;
-
-	cont += abb_in_orden(nodo_actual->der, f, extra);
-
+	cont += abb_in_orden(nodo_actual->der, f, extra, cortar);
+	return cont;
 	return cont;
 }
 
 size_t abb_pre_orden(nodo_t *nodo_actual, bool (*f)(void *, void *),
-		     void *extra)
+		     void *extra, bool *cortar)
 {
-	if (!nodo_actual)
+	if (!nodo_actual || *cortar)
 		return 0;
 
 	size_t cont = 0;
 
-	if (!f(nodo_actual->dato, extra))
-		return 1; // corto al tocar este nodo
+	if (!f(nodo_actual->dato, extra)) {
+		*cortar = true;
+		return cont + 1;
+	}
 
 	cont += 1;
-
-	cont += abb_pre_orden(nodo_actual->izq, f, extra);
-	cont += abb_pre_orden(nodo_actual->der, f, extra);
-
+	cont += abb_pre_orden(nodo_actual->izq, f, extra, cortar);
+	cont += abb_pre_orden(nodo_actual->der, f, extra, cortar);
 	return cont;
 }
 
 size_t abb_post_orden(nodo_t *nodo_actual, bool (*f)(void *, void *),
-		      void *extra)
+		      void *extra, bool *cortar)
 {
-	if (!nodo_actual)
+	if (!nodo_actual || *cortar)
 		return 0;
 
 	size_t cont = 0;
 
-	cont += abb_post_orden(nodo_actual->izq, f, extra);
-	cont += abb_post_orden(nodo_actual->der, f, extra);
+	cont += abb_post_orden(nodo_actual->izq, f, extra, cortar);
+	cont += abb_post_orden(nodo_actual->der, f, extra, cortar);
+	if (*cortar)
+		return cont;
 
-	if (!f(nodo_actual->dato, extra))
+	if (!f(nodo_actual->dato, extra)) {
+		*cortar = true;
 		return cont + 1;
+	}
 
 	cont += 1;
 	return cont;
@@ -243,13 +250,14 @@ size_t abb_con_cada_elemento(abb_t *abb, enum abb_recorrido tipo_recorrido,
 	if (!abb || !f || !abb->raiz || tipo_recorrido < 0 ||
 	    tipo_recorrido > 2)
 		return 0;
+	bool cortar = false;
 
 	if (tipo_recorrido == 0) {
-		return abb_in_orden(abb->raiz, f, extra);
+		return abb_in_orden(abb->raiz, f, extra, &cortar);
 	} else if (tipo_recorrido == 1) {
-		return abb_pre_orden(abb->raiz, f, extra);
+		return abb_pre_orden(abb->raiz, f, extra, &cortar);
 	} else {
-		return abb_post_orden(abb->raiz, f, extra);
+		return abb_post_orden(abb->raiz, f, extra, &cortar);
 	}
 }
 //-----------------------------------------------------------------------------------------------

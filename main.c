@@ -41,6 +41,21 @@ bool validando_params(int argc, char *argv[])
 	}
 	return true;
 }
+
+bool validando_func(tp1_t *tp1, abb_t *abb)
+{
+	if (tp1 && !abb) {
+		tp1_destruir(tp1);
+		return false;
+	}
+	if (!tp1 && abb) {
+		abb_destruir(abb);
+		return false;
+	}
+	if (!tp1 && !abb)
+		return false;
+	return true;
+}
 // ----------------------- Callback para guardar en arbol -----------------------
 bool guardar_en_abb(struct pokemon *poke, void *extra)
 {
@@ -118,7 +133,8 @@ int main(int argc, char *argv[])
 	struct pokemon *p = NULL;
 	tp1_t *tp1 = tp1_leer_archivo(argv[1]);
 	abb_t *abb = abb_crear(comparador_id_pk);
-	if (!tp1 || !abb)
+
+	if (!validando_func(tp1, abb))
 		return 0;
 
 	tp1_con_cada_pokemon(tp1, guardar_en_abb, abb);

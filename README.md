@@ -170,7 +170,7 @@ Esta sección describe cómo se verifican todas las funciones primitivas del pro
 
 ### Cobertura de pruebas
 
-Se realizan **171 pruebas unitarias** que incluyen:
+Se realizan **187 pruebas unitarias** que incluyen:
 
 - 🔹**Pruebas de creacion**
 - 🔹**Pruebas de incercion**

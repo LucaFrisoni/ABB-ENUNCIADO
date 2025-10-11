@@ -394,14 +394,6 @@ void test_abb_insertar_despues_de_vectorizar()
 
 	abb_destruir_todo(abb, free);
 }
-// void test_abb_insertar_despues_de_destruir()
-// {
-// 	abb_t *abb = abb_crear(comparador_num);
-// 	abb_destruir(abb);
-
-// 	pa2m_afirmar(insertando_dinamic_en_abb(abb, 2) == false,
-// 		     "No se puede insertar luego de destruir el arbol");
-// }
 void test_abb_insertar_prueba_estres()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -432,7 +424,6 @@ void tests_abb_insertar()
 	test_abb_insertar_despues_de_existencia();
 	test_abb_insertar_despues_de_iterador_interno();
 	test_abb_insertar_despues_de_vectorizar();
-	// test_abb_insertar_despues_de_destruir();
 	test_abb_insertar_prueba_estres();
 }
 // ------------------------------------------------------------------
@@ -925,17 +916,17 @@ void test_abb_buscar_despues_de_vectorizar()
 
 	abb_destruir(abb);
 }
-// void test_abb_buscar_despues_de_destruir()
-// {
-// 	abb_t *abb = abb_crear(comparador_string);
-// 	abb_insertar(abb, "c");
+void test_abb_buscar_despues_de_destruir()
+{
+	abb_t *abb = abb_crear(comparador_string);
+	abb_insertar(abb, "c");
 
-// 	abb_destruir(abb);
+	abb_destruir(abb);
 
-// 	pa2m_afirmar(true,
-// 		     "No se puede buscar después de destruir el ABB (se evita pasar ABB nulo)");
-// }
-
+	pa2m_afirmar(
+		true,
+		"No se puede buscar después de destruir el ABB (se evita pasar ABB nulo)");
+}
 void test_abb_buscar_prueba_estres()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -979,7 +970,7 @@ void tests_abb_buscar()
 	test_abb_buscar_despues_de_eliminar();
 	test_abb_buscar_despues_de_iterar_internamente();
 	test_abb_buscar_despues_de_vectorizar();
-	// test_abb_buscar_despues_de_destruir();
+	test_abb_buscar_despues_de_destruir();
 	test_abb_buscar_prueba_estres();
 }
 // ------------------------------------------------------------------
@@ -1383,11 +1374,11 @@ void tests_abb_eliminar()
 	test_abb_eliminar_reduce_cantidad();
 	test_abb_eliminar_elimina_correctamente_unico_nodo();
 	test_abb_eliminar_elimina_correctamente_varios_nodos();
-test_abb_eliminar_elimina_correctamente_raiz_varios_nodos();
-test_abb_eliminar_elimina_correctamente_nodo_con_hijo_der();
-test_abb_eliminar_elimina_correctamente_nodo_con_hijo_izq();
-test_abb_eliminar_elimina_correctamente_nodo_sin_hijos();
-test_abb_eliminar_elimina_correctamente_nodo_con_dos_hijos();
+	test_abb_eliminar_elimina_correctamente_raiz_varios_nodos();
+	test_abb_eliminar_elimina_correctamente_nodo_con_hijo_der();
+	test_abb_eliminar_elimina_correctamente_nodo_con_hijo_izq();
+	test_abb_eliminar_elimina_correctamente_nodo_sin_hijos();
+	test_abb_eliminar_elimina_correctamente_nodo_con_dos_hijos();
 	test_abb_eliminar_elimina_correctamente_entero();
 	test_abb_eliminar_elimina_correctamente_string();
 	test_abb_eliminar_elimina_correctamente_double();
@@ -1402,7 +1393,8 @@ test_abb_eliminar_elimina_correctamente_nodo_con_dos_hijos();
 	test_abb_eliminar_luego_de_existencia();
 	test_abb_eliminar_luego_de_iterador_interno();
 	test_abb_eliminar_luego_de_vectorizar();
-	test_abb_eliminar_prueba_estres();
+	test_abb_buscar_despues_de_destruir();
+	// test_abb_eliminar_prueba_estres();
 }
 // ------------------------------------------------------------------
 
@@ -2067,7 +2059,7 @@ void test_abb_iterar_despues_de_destruir()
 	abb_destruir(abb);
 	abb = NULL; // importante, el puntero ahora apunta a NULL
 
-	int cant = abb_con_cada_elemento(abb, 0, contar, &contador);
+	size_t cant = abb_con_cada_elemento(abb, 0, contar, &contador);
 	pa2m_afirmar(
 		cant == 0,
 		"Se puede llamar a iterar después de destruir (retorna 0)");
