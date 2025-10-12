@@ -1,6 +1,14 @@
 #include "abb.h"
 #include "abb_estructura_privada.h"
 
+nodo_t *creando_nodo()
+{
+	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
+	if (!nuevo_nodo)
+		return NULL;
+	return nuevo_nodo;
+}
+
 abb_t *abb_crear(int (*comparador)(const void *, const void *))
 {
 	if (!comparador)
@@ -19,7 +27,7 @@ bool abb_insertar_rec(abb_t *abb, nodo_t **nodo_actual, void *dato,
 		      int (*comparador)(const void *, const void *))
 {
 	if (!*nodo_actual) {
-		nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
+		nodo_t *nuevo_nodo = creando_nodo();
 		if (!nuevo_nodo)
 			return false;
 
@@ -41,7 +49,6 @@ bool abb_insertar_rec(abb_t *abb, nodo_t **nodo_actual, void *dato,
 
 bool abb_insertar(abb_t *abb, void *dato)
 {
-	//Ver como manejar caso que se le pasa un dato que es distinto al del abb
 	if (!abb)
 		return false;
 
@@ -199,7 +206,6 @@ size_t abb_in_orden(nodo_t *nodo_actual, bool (*f)(void *, void *), void *extra,
 
 	cont += 1;
 	cont += abb_in_orden(nodo_actual->der, f, extra, cortar);
-	return cont;
 	return cont;
 }
 

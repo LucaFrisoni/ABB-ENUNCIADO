@@ -131,13 +131,6 @@ void test_abb_crear_raiz_null()
 		     "Crear un abb inicializa el arbol con la raiz null");
 	abb_destruir(abb);
 }
-void test_abb_crear_cantidad_correcta()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	pa2m_afirmar(abb_cantidad(abb) == 0,
-		     "Un abb recien creado se inicializa con la cantidad 0");
-	abb_destruir(abb);
-}
 
 void tests_abb_crear()
 {
@@ -148,7 +141,6 @@ void tests_abb_crear()
 	test_abb_crear_con_comp_bool();
 	test_abb_crear_multiples_comp_personalizados();
 	test_abb_crear_raiz_null();
-	test_abb_crear_cantidad_correcta();
 }
 // ------------------------------------------------------------------
 void test_abb_insertar_abb_null()
@@ -157,15 +149,7 @@ void test_abb_insertar_abb_null()
 	pa2m_afirmar(abb_insertar(NULL, &num) == false,
 		     "Tratar de insertar pasando un abb NULL, devuelve false");
 }
-void test_abb_insertar_vacio()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	insertando_dinamic_en_abb(abb, 1);
-	pa2m_afirmar(abb_esta_vacio(abb) == false,
-		     "Luego de insertar el abb deja de estar vacio");
 
-	abb_destruir_todo(abb, free);
-}
 void test_abb_insertar_primer_nodo()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -185,16 +169,6 @@ void test_abb_insertar_varios_nodos()
 		     "Se insertan correctamente varios nodos");
 	pa2m_afirmar(*(int *)abb_raiz(abb) == 0,
 		     "Insertar varios nodos no modifica la raiz del abb");
-
-	abb_destruir_todo(abb, free);
-}
-void test_abb_insertar_aumenta_cantidad()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	insertando_dinamic_en_abb(abb, 2);
-	pa2m_afirmar(
-		abb_cantidad(abb) == 2,
-		"Insertar un nodo aumenta correctamente la cantidad del arbol");
 
 	abb_destruir_todo(abb, free);
 }
@@ -309,6 +283,267 @@ void test_abb_insertar_correctamente_null()
 		     "Se puede insertar NULL correctamente en el abb");
 	abb_destruir(abb);
 }
+
+void tests_abb_insertar()
+{
+	test_abb_insertar_abb_null();
+	test_abb_insertar_primer_nodo();
+	test_abb_insertar_varios_nodos();
+	test_abb_insertar_mismo_dato();
+	test_abb_insertar_correctamente_enteros();
+	test_abb_insertar_correctamente_strings();
+	test_abb_insertar_correctamente_bools();
+	test_abb_insertar_correctamente_double();
+	test_abb_insertar_correctamente_vectores();
+	test_abb_insertar_correctamente_structs();
+	test_abb_insertar_correctamente_null();
+}
+// ------------------------------------------------------------------
+void test_abb_existe_abb_null()
+{
+	pa2m_afirmar(abb_existe(NULL, "algo") == false,
+		     "Pasandole un abb NULL, devuelve false");
+}
+void test_abb_existe_raiz_null()
+{
+	abb_t *abb = abb_crear(comparador_num);
+
+	pa2m_afirmar(abb_existe(abb, "algo") == false,
+		     "En un abb vacío devuelve false");
+
+	abb_destruir(abb);
+}
+
+void tests_abb_existe()
+{
+	test_abb_existe_abb_null();
+	test_abb_existe_raiz_null();
+}
+// ------------------------------------------------------------------
+void test_abb_buscar_abb_null()
+{
+	pa2m_afirmar(abb_buscar(NULL, "dato") == NULL,
+		     "Devuelve NULL si el abb es NULL");
+}
+void test_abb_buscar_raiz_null()
+{
+	abb_t *abb = abb_crear(comparador_string);
+	pa2m_afirmar(abb_buscar(abb, "dato") == NULL,
+		     "Devuelve NULL si el abb tiene raíz NULL");
+	abb_destruir(abb);
+}
+
+void tests_abb_buscar()
+{
+	test_abb_buscar_abb_null();
+	test_abb_buscar_raiz_null();
+}
+// ------------------------------------------------------------------
+void test_abb_eliminar_abb_null()
+{
+	pa2m_afirmar(abb_eliminar(NULL, "a") == NULL,
+		     "Eliminar en un abb NULL devuelve NULL");
+}
+void test_abb_eliminar_raiz_null()
+{
+	abb_t *abb = abb_crear(comparador_num);
+
+	pa2m_afirmar(abb_eliminar(abb, "a") == NULL,
+		     "Eliminar en un abb sin nodos devuelve NULL");
+
+	abb_destruir(abb);
+}
+
+void tests_abb_eliminar()
+{
+	test_abb_eliminar_abb_null();
+	test_abb_eliminar_raiz_null();
+}
+// ------------------------------------------------------------------
+void test_abb_raiz_abb_null()
+{
+	pa2m_afirmar(abb_raiz(NULL) == NULL, "Con abb NULL, devuelve NULL");
+}
+void test_abb_raiz_raiz_null()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	pa2m_afirmar(abb_raiz(abb) == NULL, "Con abb vacio, devuelve NULL");
+	abb_destruir(abb);
+}
+
+void tests_abb_raiz()
+{
+	test_abb_raiz_abb_null();
+	test_abb_raiz_raiz_null();
+}
+// ------------------------------------------------------------------
+void tests_abb_cantidad_en_arbol_nulo()
+{
+	abb_t *abb = NULL;
+	pa2m_afirmar(abb_cantidad(abb) == 0, "Un árbol nulo tiene cantidad 0");
+}
+
+void tests_abb_cantidad()
+{
+	tests_abb_cantidad_en_arbol_nulo();
+}
+// ------------------------------------------------------------------
+void test_abb_esta_vacio_arbol_recien_creado()
+{
+	abb_t *abb = abb_crear(comparador_num);
+
+	pa2m_afirmar(abb_esta_vacio(abb), "Un árbol recién creado está vacío");
+
+	abb_destruir(abb);
+}
+void test_abb_esta_vacio_con_arbol_nulo()
+{
+	abb_t *abb_nulo = NULL;
+
+	pa2m_afirmar(abb_esta_vacio(abb_nulo),
+		     "Un árbol nulo se considera vacío");
+}
+
+void tests_abb_esta_vacio()
+{
+	test_abb_esta_vacio_arbol_recien_creado();
+	test_abb_esta_vacio_con_arbol_nulo();
+}
+// ------------------------------------------------------------------
+bool sumar_enteros(void *dato, void *extra)
+{
+	*(int *)extra += *(int *)dato;
+	return true; // sigue recorriendo
+}
+bool cortar_en_20(void *dato, void *extra)
+{
+	return *(int *)dato != 20; // corta cuando encuentra 10
+	(*(int *)extra)++;
+}
+bool contar(void *dato, void *extra)
+{
+	(void)dato; // evitamos el warning de parámetro no usado
+	(*(int *)extra)++;
+	return true; // siempre continúa la iteración
+}
+
+void test_abb_con_cada_elemento_arbol_null()
+{
+	size_t cantidad = abb_con_cada_elemento(NULL, 0, sumar_enteros, NULL);
+
+	pa2m_afirmar(cantidad == 0, "Iterar con árbol NULL devuelve 0");
+}
+void test_abb_con_cada_elemento_arbol_vacio()
+{
+	abb_t *abb = abb_crear(comparador_num);
+
+	int acumulador = 0;
+	size_t cantidad =
+		abb_con_cada_elemento(abb, 0, sumar_enteros, &acumulador);
+
+	pa2m_afirmar(cantidad == 0, "Iterar con árbol vacío devuelve 0");
+
+	abb_destruir(abb);
+}
+
+void tests_abb_con_cada_elemento()
+{
+	test_abb_con_cada_elemento_arbol_null();
+	test_abb_con_cada_elemento_arbol_vacio();
+}
+// ------------------------------------------------------------------
+void test_abb_vectorizar_abb_null()
+{
+	void *vector[10];
+	size_t cant = abb_vectorizar(NULL, 0, 10, vector);
+	pa2m_afirmar(cant == 0, "Vectorizar devuelve 0 si el árbol es NULL");
+}
+void test_abb_vectorizar_arbol_vacio()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	void *vector[10];
+
+	size_t cant = abb_vectorizar(abb, 0, 10, vector);
+	pa2m_afirmar(cant == 0, "Vectorizar devuelve 0 si el árbol está vacío");
+
+	abb_destruir(abb);
+}
+
+void tests_abb_vectorizar()
+{
+	test_abb_vectorizar_abb_null();
+	test_abb_vectorizar_arbol_vacio();
+}
+// ------------------------------------------------------------------
+void test_abb_destruir_abb_null()
+{
+	abb_destruir(NULL);
+	pa2m_afirmar(true, "Pasarle NULL a abb_destruir no genera crush");
+}
+
+void tests_abb_destruir()
+{
+	test_abb_destruir_abb_null();
+}
+// ------------------------------------------------------------------
+int contador_destructor = 0;
+void mi_destructor(void *dato)
+{
+	if (dato)
+		free(dato);
+	contador_destructor++;
+}
+void test_abb_destruir_todo_arbol_vacio()
+{
+	abb_t *abb = abb_crear(comparador_num);
+
+	contador_destructor = 0;
+	abb_destruir_todo(abb, mi_destructor);
+	abb = NULL;
+
+	pa2m_afirmar(abb == NULL, "Destruir un árbol vacío no produce errores");
+	pa2m_afirmar(contador_destructor == 0,
+		     "No se destruyen elementos porque estaba vacío");
+}
+
+void tests_abb_destruir_todo()
+{
+	test_abb_destruir_todo_arbol_vacio();
+}
+
+// --------------------------------Test de integracion----------------------------------
+void test_abb_crear_cantidad_correcta()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	pa2m_afirmar(abb_cantidad(abb) == 0,
+		     "Un abb recien creado se inicializa con la cantidad 0");
+	abb_destruir(abb);
+}
+
+void tests_de_integracion_abb_crear()
+{
+	test_abb_crear_cantidad_correcta();
+}
+// ------------------------------------------------------------------
+void test_abb_insertar_vacio()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	insertando_dinamic_en_abb(abb, 1);
+	pa2m_afirmar(abb_esta_vacio(abb) == false,
+		     "Luego de insertar el abb deja de estar vacio");
+
+	abb_destruir_todo(abb, free);
+}
+void test_abb_insertar_aumenta_cantidad()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	insertando_dinamic_en_abb(abb, 2);
+	pa2m_afirmar(
+		abb_cantidad(abb) == 2,
+		"Insertar un nodo aumenta correctamente la cantidad del arbol");
+
+	abb_destruir_todo(abb, free);
+}
 void test_abb_insertar_despues_de_eliminar()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -394,53 +629,18 @@ void test_abb_insertar_despues_de_vectorizar()
 
 	abb_destruir_todo(abb, free);
 }
-void test_abb_insertar_prueba_estres()
+
+void tests_de_integracion_abb_insertar()
 {
-	abb_t *abb = abb_crear(comparador_num);
-
-	pa2m_afirmar(insertando_dinamic_en_abb(abb, 5000) == true,
-		     "Prueba estres:Se insertan correctamente +5000 nodos");
-
-	abb_destruir_todo(abb, free);
-}
-
-void tests_abb_insertar()
-{
-	test_abb_insertar_abb_null();
 	test_abb_insertar_vacio();
-	test_abb_insertar_primer_nodo();
-	test_abb_insertar_varios_nodos();
 	test_abb_insertar_aumenta_cantidad();
-	test_abb_insertar_mismo_dato();
-	test_abb_insertar_correctamente_enteros();
-	test_abb_insertar_correctamente_strings();
-	test_abb_insertar_correctamente_bools();
-	test_abb_insertar_correctamente_double();
-	test_abb_insertar_correctamente_vectores();
-	test_abb_insertar_correctamente_structs();
-	test_abb_insertar_correctamente_null();
 	test_abb_insertar_despues_de_eliminar();
 	test_abb_insertar_despues_de_buscar();
 	test_abb_insertar_despues_de_existencia();
 	test_abb_insertar_despues_de_iterador_interno();
 	test_abb_insertar_despues_de_vectorizar();
-	test_abb_insertar_prueba_estres();
 }
 // ------------------------------------------------------------------
-void test_abb_existe_abb_null()
-{
-	pa2m_afirmar(abb_existe(NULL, "algo") == false,
-		     "Pasandole un abb NULL, devuelve false");
-}
-void test_abb_existe_raiz_null()
-{
-	abb_t *abb = abb_crear(comparador_num);
-
-	pa2m_afirmar(abb_existe(abb, "algo") == false,
-		     "En un abb vacío devuelve false");
-
-	abb_destruir(abb);
-}
 void test_abb_existe_si_existe_nodo()
 {
 	abb_t *abb = abb_crear(comparador_string);
@@ -541,17 +741,6 @@ void test_abb_existe_despues_de_vectorizar()
 
 	abb_destruir(abb);
 }
-void test_abb_existe_despues_de_destruir()
-{
-	abb_t *abb = abb_crear(comparador_string);
-	abb_insertar(abb, "c");
-
-	abb_destruir(abb);
-
-	pa2m_afirmar(
-		abb_existe(abb, "c") == false,
-		"No debería poder consultarse existencia después de destruir el abb");
-}
 void test_abb_existe_entero()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -642,28 +831,9 @@ void test_abb_existe_null()
 
 	abb_destruir(abb);
 }
-void test_abb_existe_prueba_estres()
+
+void tests_de_integracion_abb_existe()
 {
-	abb_t *abb = abb_crear(comparador_num);
-	insertando_dinamic_en_abb(abb, 5000);
-	int n1 = 2500;
-	int n2 = 5900;
-
-	pa2m_afirmar(
-		abb_existe(abb, &n1) == true,
-		"Prueba estres:Existe un elemento en un abb tras insertar 5000 nodos");
-
-	pa2m_afirmar(
-		abb_existe(abb, &n2) == false,
-		"Prueba estres:No existe un elemento no insertado en el abb grande");
-
-	abb_destruir_todo(abb, free);
-}
-
-void tests_abb_existe()
-{
-	test_abb_existe_abb_null();
-	test_abb_existe_raiz_null();
 	test_abb_existe_si_existe_nodo();
 	test_abb_existe_no_existe_nodo();
 	test_abb_existe_no_modifica_cantidad();
@@ -672,28 +842,14 @@ void tests_abb_existe()
 	test_abb_existe_despues_de_eliminar();
 	test_abb_existe_despues_de_iterar_internamente();
 	test_abb_existe_despues_de_vectorizar();
-	// test_abb_existe_despues_de_destruir();
 	test_abb_existe_entero();
 	test_abb_existe_strings();
 	test_abb_existe_double();
 	test_abb_existe_vectores();
 	test_abb_existe_structs();
 	test_abb_existe_null();
-	test_abb_existe_prueba_estres();
 }
 // ------------------------------------------------------------------
-void test_abb_buscar_abb_null()
-{
-	pa2m_afirmar(abb_buscar(NULL, "dato") == NULL,
-		     "Devuelve NULL si el abb es NULL");
-}
-void test_abb_buscar_raiz_null()
-{
-	abb_t *abb = abb_crear(comparador_string);
-	pa2m_afirmar(abb_buscar(abb, "dato") == NULL,
-		     "Devuelve NULL si el abb tiene raíz NULL");
-	abb_destruir(abb);
-}
 void test_abb_buscar_devuelve_dato_encontrado()
 {
 	abb_t *abb = abb_crear(comparador_string);
@@ -927,31 +1083,9 @@ void test_abb_buscar_despues_de_destruir()
 		true,
 		"No se puede buscar después de destruir el ABB (se evita pasar ABB nulo)");
 }
-void test_abb_buscar_prueba_estres()
+
+void tests_de_integracion_abb_buscar()
 {
-	abb_t *abb = abb_crear(comparador_num);
-	insertando_dinamic_en_abb(abb, 5000);
-
-	bool encontrado = true;
-	for (int i = 0; i < 5000; i++) {
-		int key = i;
-		if (*(int *)abb_buscar(abb, &key) != i) {
-			encontrado = false;
-			break;
-		}
-	}
-
-	pa2m_afirmar(
-		encontrado,
-		"Prueba de estres:Se pueden buscar correctamente 5000 nodos");
-
-	abb_destruir_todo(abb, free);
-}
-
-void tests_abb_buscar()
-{
-	test_abb_buscar_abb_null();
-	test_abb_buscar_raiz_null();
 	test_abb_buscar_devuelve_dato_encontrado();
 	test_abb_buscar_devuelve_null_sino_encuentra();
 	test_abb_buscar_solo_un_nodo();
@@ -971,23 +1105,8 @@ void tests_abb_buscar()
 	test_abb_buscar_despues_de_iterar_internamente();
 	test_abb_buscar_despues_de_vectorizar();
 	test_abb_buscar_despues_de_destruir();
-	test_abb_buscar_prueba_estres();
 }
 // ------------------------------------------------------------------
-void test_abb_eliminar_abb_null()
-{
-	pa2m_afirmar(abb_eliminar(NULL, "a") == NULL,
-		     "Eliminar en un abb NULL devuelve NULL");
-}
-void test_abb_eliminar_raiz_null()
-{
-	abb_t *abb = abb_crear(comparador_num);
-
-	pa2m_afirmar(abb_eliminar(abb, "a") == NULL,
-		     "Eliminar en un abb sin nodos devuelve NULL");
-
-	abb_destruir(abb);
-}
 void test_abb_eliminar_devuelve_correctamente_dato_eliminado()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -1342,34 +1461,9 @@ void test_abb_eliminar_luego_de_vectorizar()
 
 	abb_destruir(abb);
 }
-void test_abb_eliminar_prueba_estres()
+
+void tests_de_integracion_abb_eliminar()
 {
-	abb_t *abb = abb_crear(comparador_num);
-	int cantidad = 5000;
-	int *numeros[cantidad];
-
-	// Insertamos 5000 nodos
-	insertando_dinamic_en_abb(abb, 5000);
-
-	// Eliminamos todos los nodos
-	bool exito = true;
-	for (int i = 0; i < cantidad; i++) {
-		int *eliminado = abb_eliminar(abb, numeros[i]);
-		if (!eliminado || *eliminado != (int)i)
-			exito = false;
-		free(eliminado);
-	}
-
-	pa2m_afirmar(exito && abb_cantidad(abb) == 0,
-		     "Prueba de estres: insertar y eliminar 5000 nodos");
-
-	abb_destruir(abb);
-}
-
-void tests_abb_eliminar()
-{
-	test_abb_eliminar_abb_null();
-	test_abb_eliminar_raiz_null();
 	test_abb_eliminar_devuelve_correctamente_dato_eliminado();
 	test_abb_eliminar_reduce_cantidad();
 	test_abb_eliminar_elimina_correctamente_unico_nodo();
@@ -1394,20 +1488,8 @@ void tests_abb_eliminar()
 	test_abb_eliminar_luego_de_iterador_interno();
 	test_abb_eliminar_luego_de_vectorizar();
 	test_abb_buscar_despues_de_destruir();
-	// test_abb_eliminar_prueba_estres();
 }
 // ------------------------------------------------------------------
-
-void test_abb_raiz_abb_null()
-{
-	pa2m_afirmar(abb_raiz(NULL) == NULL, "Con abb NULL, devuelve NULL");
-}
-void test_abb_raiz_raiz_null()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	pa2m_afirmar(abb_raiz(abb) == NULL, "Con abb vacio, devuelve NULL");
-	abb_destruir(abb);
-}
 void test_abb_raiz_devuelve_correctamente()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -1572,20 +1654,9 @@ void test_abb_raiz_despues_de_vectorizar()
 
 	abb_destruir_todo(abb, free);
 }
-void test_abb_raiz_prueba_estres()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	insertando_dinamic_en_abb(abb, 5000);
-	pa2m_afirmar(
-		*(int *)abb_raiz(abb) == 0,
-		"Prueba estres:Devuele correctamente el dato de la raiz aun siendo +5000 nodos");
-	abb_destruir_todo(abb, free);
-}
 
-void tests_abb_raiz()
+void tests_de_integracion_abb_raiz()
 {
-	test_abb_raiz_abb_null();
-	test_abb_raiz_raiz_null();
 	test_abb_raiz_devuelve_correctamente();
 	test_abb_raiz_devuelve_entero();
 	test_abb_raiz_devuelve_string();
@@ -1600,14 +1671,8 @@ void tests_abb_raiz()
 	test_abb_raiz_despues_de_eliminar();
 	test_abb_raiz_despues_de_iterar_internamente();
 	test_abb_raiz_despues_de_vectorizar();
-	test_abb_raiz_prueba_estres();
 }
 // ------------------------------------------------------------------
-void tests_abb_cantidad_en_arbol_nulo()
-{
-	abb_t *abb = NULL;
-	pa2m_afirmar(abb_cantidad(abb) == 0, "Un árbol nulo tiene cantidad 0");
-}
 void test_abb_cantidad_aumenta_al_insertar()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -1646,21 +1711,12 @@ void test_abb_cantidad_disminuye_al_eliminar()
 	abb_destruir(abb);
 }
 
-void tests_abb_cantidad()
+void tests_de_integracion_abb_cantidad()
 {
-	tests_abb_cantidad_en_arbol_nulo();
 	test_abb_cantidad_aumenta_al_insertar();
 	test_abb_cantidad_disminuye_al_eliminar();
 }
 // ------------------------------------------------------------------
-void test_abb_esta_vacio_arbol_recien_creado()
-{
-	abb_t *abb = abb_crear(comparador_num);
-
-	pa2m_afirmar(abb_esta_vacio(abb), "Un árbol recién creado está vacío");
-
-	abb_destruir(abb);
-}
 void test_abb_esta_vacio_con_elemento_insertado()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -1687,39 +1743,13 @@ void test_abb_esta_vacio_despues_de_eliminar_todos()
 
 	abb_destruir(abb);
 }
-void test_abb_esta_vacio_con_arbol_nulo()
-{
-	abb_t *abb_nulo = NULL;
 
-	pa2m_afirmar(abb_esta_vacio(abb_nulo),
-		     "Un árbol nulo se considera vacío");
-}
-
-void tests_abb_esta_vacio()
+void tests_de_integracion_abb_esta_vacio()
 {
-	test_abb_esta_vacio_arbol_recien_creado();
 	test_abb_esta_vacio_con_elemento_insertado();
 	test_abb_esta_vacio_despues_de_eliminar_todos();
-	test_abb_esta_vacio_con_arbol_nulo();
 }
 // ------------------------------------------------------------------
-bool sumar_enteros(void *dato, void *extra)
-{
-	*(int *)extra += *(int *)dato;
-	return true; // sigue recorriendo
-}
-bool cortar_en_20(void *dato, void *extra)
-{
-	return *(int *)dato != 20; // corta cuando encuentra 10
-	(*(int *)extra)++;
-}
-bool contar(void *dato, void *extra)
-{
-	(void)dato; // evitamos el warning de parámetro no usado
-	(*(int *)extra)++;
-	return true; // siempre continúa la iteración
-}
-
 void test_abb_con_cada_elemento_recorre_todos()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -1769,12 +1799,6 @@ void test_abb_con_cada_elemento_corta_en_condicion()
 
 	abb_destruir(abb);
 }
-void test_abb_con_cada_elemento_arbol_null()
-{
-	size_t cantidad = abb_con_cada_elemento(NULL, 0, sumar_enteros, NULL);
-
-	pa2m_afirmar(cantidad == 0, "Iterar con árbol NULL devuelve 0");
-}
 void test_abb_con_cada_elemento_funcion_null()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -1784,18 +1808,6 @@ void test_abb_con_cada_elemento_funcion_null()
 	size_t cantidad = abb_con_cada_elemento(abb, 0, NULL, NULL);
 
 	pa2m_afirmar(cantidad == 0, "Iterar con función NULL devuelve 0");
-
-	abb_destruir(abb);
-}
-void test_abb_con_cada_elemento_arbol_vacio()
-{
-	abb_t *abb = abb_crear(comparador_num);
-
-	int acumulador = 0;
-	size_t cantidad =
-		abb_con_cada_elemento(abb, 0, sumar_enteros, &acumulador);
-
-	pa2m_afirmar(cantidad == 0, "Iterar con árbol vacío devuelve 0");
 
 	abb_destruir(abb);
 }
@@ -2067,13 +2079,11 @@ void test_abb_iterar_despues_de_destruir()
 		     "El contador no aumenta porque el árbol ya no existe");
 }
 
-void tests_abb_con_cada_elemento()
+void tests_de_integracion_abb_con_cada_elemento()
 {
 	test_abb_con_cada_elemento_recorre_todos();
 	test_abb_con_cada_elemento_corta_en_condicion();
-	test_abb_con_cada_elemento_arbol_null();
 	test_abb_con_cada_elemento_funcion_null();
-	test_abb_con_cada_elemento_arbol_vacio();
 	test_abb_con_cada_elemento_tipo_invalido_menor();
 	test_abb_con_cada_elemento_tipo_invalido_mayor();
 	test_abb_con_cada_elemento_enteros();
@@ -2093,12 +2103,6 @@ void tests_abb_con_cada_elemento()
 	test_abb_iterar_despues_de_destruir();
 }
 // ------------------------------------------------------------------
-void test_abb_vectorizar_abb_null()
-{
-	void *vector[10];
-	size_t cant = abb_vectorizar(NULL, 0, 10, vector);
-	pa2m_afirmar(cant == 0, "Vectorizar devuelve 0 si el árbol es NULL");
-}
 void test_abb_vectorizar_vector_null()
 {
 	abb_t *abb = abb_crear(comparador_num);
@@ -2107,16 +2111,6 @@ void test_abb_vectorizar_vector_null()
 
 	size_t cant = abb_vectorizar(abb, 0, 10, NULL);
 	pa2m_afirmar(cant == 0, "Vectorizar devuelve 0 si el vector es NULL");
-
-	abb_destruir(abb);
-}
-void test_abb_vectorizar_arbol_vacio()
-{
-	abb_t *abb = abb_crear(comparador_num);
-	void *vector[10];
-
-	size_t cant = abb_vectorizar(abb, 0, 10, vector);
-	pa2m_afirmar(cant == 0, "Vectorizar devuelve 0 si el árbol está vacío");
 
 	abb_destruir(abb);
 }
@@ -2331,11 +2325,9 @@ void test_abb_vectorizar_despues_de_destruir()
 		"Se puede llamar a vectorizar después de destruir (no crash, retorna 0)");
 }
 
-void tests_abb_vectorizar()
+void tests_de_integracion_abb_vectorizar()
 {
-	test_abb_vectorizar_abb_null();
 	test_abb_vectorizar_vector_null();
-	test_abb_vectorizar_arbol_vacio();
 	test_abb_vectorizar_tipo_ordenamiento_incorrecto();
 	test_abb_vectorizar_tipo_ordenamiento_correcto();
 	test_abb_vectorizar_tamanio_vector();
@@ -2351,16 +2343,21 @@ void tests_abb_vectorizar()
 	test_abb_vectorizar_despues_de_destruir();
 }
 // ------------------------------------------------------------------
-void test_abb_destruir_verificar_arbol_nulo()
+void test_abb_destruir_verificar_destruccion()
 {
 	abb_t *abb = abb_crear(comparador_num);
-	int a = 42;
-	abb_insertar(abb, &a);
-
 	abb_destruir(abb);
-	abb = NULL;
+	pa2m_afirmar(true, "Destruir un abb vacio no genera crush");
 
-	pa2m_afirmar(abb == NULL, "El árbol fue destruido correctamente");
+	abb_t *abb2 = abb_crear(comparador_num);
+	int a = 42;
+	abb_insertar(abb2, &a);
+
+	abb_destruir(abb2);
+	abb2 = NULL;
+
+	pa2m_afirmar(abb2 == NULL,
+		     "Se destruye correctamente un abb con elementos");
 }
 void test_abb_destruir_elementos_siguen_accesibles()
 {
@@ -2386,6 +2383,112 @@ void test_abb_destruir_elementos_siguen_accesibles()
 		free(elementos[i]);
 	free(elementos);
 }
+
+void tests_de_integracion_abb_destruir()
+{
+	test_abb_destruir_verificar_destruccion();
+	test_abb_destruir_elementos_siguen_accesibles();
+}
+// ------------------------------------------------------------------
+void test_abb_destruir_todo_arbol_con_elementos()
+{
+	abb_t *abb = abb_crear(comparador_num);
+
+	insertando_dinamic_en_abb(abb, 10);
+
+	contador_destructor = 0;
+	abb_destruir_todo(abb, mi_destructor);
+	abb = NULL;
+
+	pa2m_afirmar(abb == NULL, "El árbol fue destruido correctamente");
+	pa2m_afirmar(contador_destructor == 10,
+		     "Todos los elementos fueron destruidos correctamente");
+}
+
+void tests_de_integracion_abb_destruir_todo()
+{
+	test_abb_destruir_todo_arbol_con_elementos();
+}
+// --------------------------------Test de Estres----------------------------------
+void test_abb_insertar_prueba_estres()
+{
+	abb_t *abb = abb_crear(comparador_num);
+
+	pa2m_afirmar(insertando_dinamic_en_abb(abb, 5000) == true,
+		     "Prueba estres:Se insertan correctamente +5000 nodos");
+
+	abb_destruir_todo(abb, free);
+}
+
+void tests_de_estres_abb_insertar()
+{
+	test_abb_insertar_prueba_estres();
+}
+// ------------------------------------------------------------------
+void test_abb_existe_prueba_estres()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	insertando_dinamic_en_abb(abb, 5000);
+	int n1 = 2500;
+	int n2 = 5900;
+
+	pa2m_afirmar(
+		abb_existe(abb, &n1) == true,
+		"Prueba estres:Existe un elemento en un abb tras insertar 5000 nodos");
+
+	pa2m_afirmar(
+		abb_existe(abb, &n2) == false,
+		"Prueba estres:No existe un elemento no insertado en el abb grande");
+
+	abb_destruir_todo(abb, free);
+}
+
+void tests_de_estres_abb_existe()
+{
+	test_abb_existe_prueba_estres();
+}
+// ------------------------------------------------------------------
+void test_abb_buscar_prueba_estres()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	insertando_dinamic_en_abb(abb, 5000);
+
+	bool encontrado = true;
+	for (int i = 0; i < 5000; i++) {
+		int key = i;
+		if (*(int *)abb_buscar(abb, &key) != i) {
+			encontrado = false;
+			break;
+		}
+	}
+
+	pa2m_afirmar(
+		encontrado,
+		"Prueba de estres:Se pueden buscar correctamente 5000 nodos");
+
+	abb_destruir_todo(abb, free);
+}
+
+void tests_de_estres_abb_buscar()
+{
+	test_abb_buscar_prueba_estres();
+}
+// ------------------------------------------------------------------
+void test_abb_raiz_prueba_estres()
+{
+	abb_t *abb = abb_crear(comparador_num);
+	insertando_dinamic_en_abb(abb, 5000);
+	pa2m_afirmar(
+		*(int *)abb_raiz(abb) == 0,
+		"Prueba estres:Devuele correctamente el dato de la raiz aun siendo +5000 nodos");
+	abb_destruir_todo(abb, free);
+}
+
+void tests_de_estres_abb_raiz()
+{
+	test_abb_raiz_prueba_estres();
+}
+// ------------------------------------------------------------------
 void test_abb_destruir_prueba_estres()
 {
 	const size_t CANT = 1000;
@@ -2418,52 +2521,11 @@ void test_abb_destruir_prueba_estres()
 	free(elementos);
 }
 
-void tests_abb_destruir()
+void tests_de_estres_abb_destruir()
 {
-	test_abb_destruir_verificar_arbol_nulo();
-	test_abb_destruir_elementos_siguen_accesibles();
 	test_abb_destruir_prueba_estres();
 }
 // ------------------------------------------------------------------
-int contador_destructor = 0;
-void mi_destructor(void *dato)
-{
-	if (dato)
-		free(dato);
-	contador_destructor++;
-}
-
-void test_abb_destruir_todo_arbol_con_elementos()
-{
-	abb_t *abb = abb_crear(comparador_num);
-
-	insertando_dinamic_en_abb(abb, 10);
-
-	contador_destructor = 0;
-	abb_destruir_todo(abb, mi_destructor);
-	abb = NULL;
-
-	pa2m_afirmar(abb == NULL, "El árbol fue destruido correctamente");
-	pa2m_afirmar(contador_destructor == 10,
-		     "Todos los elementos fueron destruidos correctamente");
-}
-void test_abb_destruir_todo_arbol_vacio()
-{
-	abb_t *abb = abb_crear(comparador_num);
-
-	contador_destructor = 0;
-	abb_destruir_todo(abb, mi_destructor);
-	abb = NULL;
-
-	pa2m_afirmar(abb == NULL, "Destruir un árbol vacío no produce errores");
-	pa2m_afirmar(contador_destructor == 0,
-		     "No se destruyen elementos porque estaba vacío");
-}
-void tests_abb_destruir_todo()
-{
-	test_abb_destruir_todo_arbol_con_elementos();
-	test_abb_destruir_todo_arbol_vacio();
-}
 
 int main()
 {
@@ -2503,6 +2565,59 @@ int main()
 
 	pa2m_nuevo_grupo("---- abb_destruir_todo ----");
 	tests_abb_destruir_todo();
+
+	pa2m_nuevo_grupo("============== Tests de Integracion ===============");
+	pa2m_nuevo_grupo("---- abb_crear ----");
+	tests_de_integracion_abb_crear();
+
+	pa2m_nuevo_grupo("---- abb_insertar ----");
+	tests_de_integracion_abb_insertar();
+
+	pa2m_nuevo_grupo("---- abb_existe ----");
+	tests_de_integracion_abb_existe();
+
+	pa2m_nuevo_grupo("---- abb_buscar ----");
+	tests_de_integracion_abb_buscar();
+
+	pa2m_nuevo_grupo("---- abb_eliminar ----");
+	tests_de_integracion_abb_eliminar();
+
+	pa2m_nuevo_grupo("---- abb_raiz ----");
+	tests_de_integracion_abb_raiz();
+
+	pa2m_nuevo_grupo("---- abb_cantidad ----");
+	tests_de_integracion_abb_cantidad();
+
+	pa2m_nuevo_grupo("---- abb_esta_vacio ----");
+	tests_de_integracion_abb_esta_vacio();
+
+	pa2m_nuevo_grupo("---- abb_con_cada_elemento ----");
+	tests_de_integracion_abb_con_cada_elemento();
+
+	pa2m_nuevo_grupo("---- abb_vectorizar ----");
+	tests_de_integracion_abb_vectorizar();
+
+	pa2m_nuevo_grupo("---- abb_destruir ----");
+	tests_de_integracion_abb_destruir();
+
+	pa2m_nuevo_grupo("---- abb_destruir_todo ----");
+	tests_de_integracion_abb_destruir_todo();
+
+	pa2m_nuevo_grupo("============== Tests de Estres ===============");
+	pa2m_nuevo_grupo("---- abb_insertar ----");
+	tests_de_estres_abb_insertar();
+
+	pa2m_nuevo_grupo("---- abb_existe ----");
+	tests_de_estres_abb_existe();
+
+	pa2m_nuevo_grupo("---- abb_buscar ----");
+	tests_de_estres_abb_buscar();
+
+	pa2m_nuevo_grupo("---- abb_raiz ----");
+	test_abb_raiz_prueba_estres();
+
+	pa2m_nuevo_grupo("---- abb_destruir ----");
+	tests_de_estres_abb_destruir();
 
 	return pa2m_mostrar_reporte();
 }

@@ -44,6 +44,7 @@ Representa un **nodo** del arbol binario.
 - Guarda un **puntero** al siguiente nodo izquierdo _(Puede ser NULL)_.
 
 📊 **Diagrama de memoria:**
+![image1](assets/img/image.png)
 
 ---
 
@@ -56,6 +57,7 @@ Representa un **arbol binario**.
 - Guarda una **funcion comparadora**.
 
 📊 **Diagrama de memoria:**
+![image2](assets/img/image2.png)
 
 ---
 
